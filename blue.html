@@ -167,29 +167,28 @@ h1 {
 
 /* --- Buttons --- */
 .controls {
-  position: fixed;
-  bottom: 40px;
-  z-index: 200;
-  display: flex;
-  gap: 15px;
-  /* Centered horizontally on small screens */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%; /* Better on small screens */
-  justify-content: center;
+position: fixed;
+bottom: 40px;
+z-index: 200;
+display: flex;
+gap: 15px;
+left: 50%;
+transform: translateX(-50%);
+width: 90%; 
+justify-content: center;
 }
 
 .control-button {
-  font-size: 1rem; /* Smaller font on small screens */
-  padding: 10px 15px;
-  background-color: #fff2b3;
-  color: black;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transition: background-color 0.15s;
-  white-space: nowrap;
+font-size: 1.1rem; /* Zmniejszony font */
+padding: 10px 15px; /* Mniejszy padding */
+color: white;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+transition: background-color 0.15s, transform 0.1s;
+font-weight: 600;
+white-space: nowrap;
 }
 /* Button styles */
 #next-bead { background-color: #4CAF50; color: white; }
