@@ -175,23 +175,23 @@ bottom: 40px;
 z-index: 200;
 display: flex;
 gap: 15px;
-/* Poprawione centrowanie na urządzeniach mobilnych */
+/* Poprawione centrowanie */
 left: 50%;
 transform: translateX(-50%);
-width: 90%; /* Lepiej wygląda na małych ekranach */
+width: 90%; 
 justify-content: center;
 }
 
 .control-button {
 font-size: 1rem; /* Mniejszy font na mniejszych ekranach */
 padding: 10px 15px;
-background-color: #fff2b3;
-color: black;
+color: white;
 border: none;
 border-radius: 10px;
 cursor: pointer;
 box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-transition: background-color 0.15s;
+transition: background-color 0.15s, transform 0.1s;
+font-weight: 600;
 white-space: nowrap;
 }
 /* Uproszczone style przycisków */
