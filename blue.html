@@ -200,8 +200,23 @@ white-space: nowrap;
 #reset-bead:hover { background-color: #c82333; }
 
 @media (max-width: 600px) {
-  .controls {
+  .controls{
     bottom: 20px;
+    width: 95%;
+    gap: 8px;
+    /* Usunięto margin-left, zastąpiono przez flex/translate centrowanie */
+    margin-left: 0; 
+  }
+  .rosary-container{
+    /* Utrzymanie centrowania */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-left: 0;
+  }
+  .control-button {
+    font-size: 0.9rem;
+    padding: 8px 10px;
   }
 }
 
