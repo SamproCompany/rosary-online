@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Interaktywny Różaniec</title>
+  <style>
+    :root{
+      --bg:#f4f6f8;
+      --bead:#d54c4c;
+      --bead-dark:#b43a3a;
+      --bead-size:44px;
+      --viewport-width:640px;
+    }
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+    body{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#eef2f6,#f9fbfc);padding:24px}
+
+    .app{width:100%;max-width:1100px;background:white;border-radius:12px;box-shadow:0 8px 30px rgba(20,30,50,.08);overflow:hidden;display:grid;grid-template-columns:1fr 120px}
+
+    /* LEWA — widok różańca (zoomowany fragment) */
+    .left{padding:24px;display:flex;flex-direction:column;gap:16px}
+    .viewport{
+      width:100%;height:220px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfdff);overflow:hidden;position:relative;box-shadow:inset 0 2px 8px rgba(20,30,50,.04);border:1px solid rgba(10,20,40,.03);
+    }
+    /* clip i center */
+    .viewport-inner{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:100%;display:flex;align-items:center;}
+
+    /* tor różańca — bardzo długi pasek z kulkami */
+    .track{display:flex;align-items:center;gap:18px;padding:0 40px;transition:transform .45s cubic-bezier(.22,.9,.3,1);will-change:transform}
+
+    .bead{
+      width:var(--bead-size);height:var(--bead-size);border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 6px 14px rgba(12,18,30,.12);
+      background:radial-gradient(circle at 30% 25%, #fff8, transparent 8%),var(--bead);
+      border:4px solid rgba(255,255,255,.35);
+      transition:transform .25s ease, box-shadow .2s ease;
+    }
+    .bead .inner{width:64%;height:64%;border-radius:50%;background:linear-gradient(180deg,var(--bead-dark),var(--bead));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;}
+
+    /* wybrana kulka — większa */
+    .bead.selected{transform:scale(1.26) translateY(-6px);box-shadow:0 12px 30px rgba(12,18,30,.18)}
+
+    /* controls */
+    .controls{display:flex;gap:10px;align-items:center}
+    button{background:#0b69ff;color:white;border:0;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(11,105,255,.12)}
+    button.secondary{background:transparent;color:#0b69ff;border:1px solid rgba(11,105,255,.12);box-shadow:none}
+
+    .meta{display:flex;align-items:center;gap:12px;color:#334155;font-size:14px}
+
+    /* PRAWA — wskaźnik postępu + strzałeczka */
+    .right{padding:18px;border-left:1px dashed rgba(10,20,40,.04);display:flex;flex-direction:column;align-items:center;gap:12px}
+    .progress-wrap{position:relative;height:420px;width:36px;background:linear-gradient(180deg,#fff,#f7fbff);border-radius:18px;display:flex;align-items:center;justify-content:center;padding:8px;border:1px solid rgba(10,20,40,.03)}
+    .progress{position:absolute;left:50%;transform:translateX(-50%);width:6px;background:#e6eefb;border-radius:4px;top:12px;bottom:12px}
+    .marker{position:absolute;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#0b69ff;color:#fff;font-size:12px}
+    .progress-label{font-size:13px;color:#475569}
+
+    /* responsive */
+    @media (max-width:880px){
+      .app{grid-template-columns:1fr}
+      .right{flex-direction:row;padding:12px;border-left:none;border-top:1px dashed rgba(10,20,40,.04)}
+      .progress-wrap{height:80px;width:100%;border-radius:10px;display:flex;justify-content:flex-start}
+      .progress{left:10px;transform:none;width:6px;height:64px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Interaktywny różaniec">
+    <div class="left">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="meta"> <strong>Różaniec</strong> <span style="opacity:.6;margin-left:8px">widok fragmentu (zoom)</span></div>
+        <div class="controls">
+          <button id="prevBtn" aria-label="Poprzednia">◀ Poprzedni</button>
+          <button id="nextBtn" aria-label="Następna">Następny ▶</button>
+        </div>
+      </div>
+
+      <div class="viewport" id="viewport">
+        <div class="viewport-inner" id="viewportInner">
+          <div class="track" id="track" role="list"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="color:#64748b;font-size:13px">Użyj strzałek ⬅️ ➡️ lub przycisków powyżej</div>
+        <div style="color:#0b69ff;font-weight:700" id="positionLabel">1 / 53</div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="progress-wrap" aria-hidden="true">
+        <div class="progress" id="progress"></div>
+        <div class="marker" id="marker">1</div>
+      </div>
+      <div class="progress-label">Pozycja w różańcu</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const COUNT = 53; // możesz zmienić na dowolną liczbę >50
+      const track = document.getElementById('track');
+      const viewport = document.getElementById('viewport');
+      const viewportInner = document.getElementById('viewportInner');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const positionLabel = document.getElementById('positionLabel');
+      const marker = document.getElementById('marker');
+      const progressWrap = document.querySelector('.progress-wrap');
+
+      // dynamic creation kulek
+      for(let i=1;i<=COUNT;i++){
+        const b = document.createElement('div'); b.className='bead'; b.setAttribute('role','listitem');
+        const inner = document.createElement('div'); inner.className='inner'; inner.textContent = i;
+        b.appendChild(inner);
+        track.appendChild(b);
+      }
+
+      const beads = Array.from(track.children);
+      let selected = 0;
+
+      function updateSelected(index, animated=true){
+        selected = Math.max(0,Math.min(COUNT-1,index));
+        beads.forEach((b,i)=> b.classList.toggle('selected', i===selected));
+        positionLabel.textContent = `${selected+1} / ${COUNT}`;
+        marker.textContent = selected+1;
+
+        // uśrednimy szerokość i gap aby wyrównać center
+        const beadEl = beads[selected];
+        const vpRect = viewport.getBoundingClientRect();
+        const beadRect = beadEl.getBoundingClientRect();
+
+        // oblicz translateX potrzebny do ustawienia wybranej kulki na środku viewportu
+        const trackRect = track.getBoundingClientRect();
+        // current offset of bead relative to track left
+        const beadCenter = (beadRect.left - trackRect.left) + beadRect.width/2;
+        const desiredCenter = vpRect.width/2;
+        const currentTrackTranslate = getCurrentTranslateX(track);
+
+        const newTranslate = currentTrackTranslate - (beadCenter - desiredCenter);
+        track.style.transition = animated ? 'transform .45s cubic-bezier(.22,.9,.3,1)' : 'none';
+        track.style.transform = `translateX(${newTranslate}px)`;
+
+        // update marker vertical position inside progressWrap
+        const wrapRect = progressWrap.getBoundingClientRect();
+        const topPadding = 12;
+        const bottomPadding = 12;
+        const usable = wrapRect.height - topPadding - bottomPadding;
+        const ratio = selected / (COUNT - 1 || 1);
+        const markerY = topPadding + ratio * usable;
+        marker.style.top = markerY + 'px';
+      }
+
+      function getCurrentTranslateX(el){
+        const style = window.getComputedStyle(el);
+        const matrix = style.transform || style.webkitTransform || 'none';
+        if(matrix === 'none') return 0;
+        // matrix(a, b, c, d, tx, ty)
+        const values = matrix.match(/matrix\((.+)\)/);
+        if(!values) return 0;
+        const parts = values[1].split(',');
+        const tx = parseFloat(parts[4]);
+        return tx;
+      }
+
+      prevBtn.addEventListener('click', ()=> updateSelected(selected-1));
+      nextBtn.addEventListener('click', ()=> updateSelected(selected+1));
+
+      // klawisze
+      window.addEventListener('keydown',(e)=>{
+        if(e.key === 'ArrowRight') { e.preventDefault(); updateSelected(selected+1); }
+        if(e.key === 'ArrowLeft') { e.preventDefault(); updateSelected(selected-1); }
+      });
+
+      // responsywne ustawienie początkowe (umieść wybraną na środku)
+      function init(){
+        // ustaw track w pozycji środkowej tak, by mieć przestrzeń z lewej i prawej
+        // Najpierw reset
+        track.style.transform = 'translateX(0px)';
+        // małe opóźnienie by DOM miało rozmiary
+        setTimeout(()=> updateSelected(0,false),20);
+      }
+
+      // Obsługa przewijania drag (opcjonalnie)
+      let dragging=false, startX=0, startTx=0;
+      track.addEventListener('pointerdown', (ev)=>{
+        dragging=true; track.setPointerCapture(ev.pointerId);
+        startX = ev.clientX; startTx = getCurrentTranslateX(track);
+        track.style.transition = 'none';
+      });
+      window.addEventListener('pointermove',(ev)=>{
+        if(!dragging) return;
+        const dx = ev.clientX - startX;
+        track.style.transform = `translateX(${startTx + dx}px)`;
+      });
+      window.addEventListener('pointerup',(ev)=>{
+        if(!dragging) return; dragging=false;
+        // po puszczeniu snap do najbliższej kulki i ustaw selected
+        const trackRect = track.getBoundingClientRect();
+        const vpRect = viewport.getBoundingClientRect();
+        // znajdź kulkę która jest najbliżej środka widoku
+        let closestIndex = 0; let closestDist=1e9;
+        beads.forEach((b,i)=>{
+          const r = b.getBoundingClientRect();
+          const center = (r.left - trackRect.left) + r.width/2 + getCurrentTranslateX(track) - getCurrentTranslateX(track); // simplified
+          const beadCenterInViewport = r.left + r.width/2 - vpRect.left;
+          const dist = Math.abs(beadCenterInViewport - vpRect.width/2);
+          if(dist < closestDist){ closestDist = dist; closestIndex = i; }
+        });
+        updateSelected(closestIndex,true);
+      });
+
+      // resize: przy zmianie rozdzielczości przelicz marker i pozycję
+      window.addEventListener('resize', ()=> updateSelected(selected,false));
+
+      init();
+    })();
+  </script>
+</body>
+</html>

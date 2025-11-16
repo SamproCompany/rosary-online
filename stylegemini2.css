@@ -1,0 +1,163 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden; /* Zapobiega przewijaniu całej strony */
+}
+
+h1 {
+    font-weight: 300;
+}
+
+.rosary-container {
+    width: 90%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* "Okienko" do podglądu paciorków */
+.viewport {
+    width: 100%;
+    height: 100px; /* Wysokość naszego "okienka" */
+    border: 2px solid #555;
+    background-color: #222;
+    border-radius: 10px;
+    overflow: hidden; /* To jest kluczowe! Chowa wszystko, co się nie mieści */
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Wskaźnik "tutaj jesteś" (strzałka) */
+.indicator {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.7);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+    z-index: 10;
+}
+.indicator::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid rgba(255, 0, 0, 0.7);
+}
+
+
+/* "Taśma" trzymająca wszystkie paciorki */
+.rosary-track {
+    display: flex; /* Ustawia paciorki w rzędzie */
+    align-items: center;
+    padding: 0 50vw; /* Duży padding, aby pierwszy/ostatni paciorek mógł dojechać do środka */
+    position: relative;
+    /* Płynne przejście podczas przesuwania */
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Ogólny styl dla wszystkich "elementów" na taśmie */
+.bead {
+    flex-shrink: 0; /* Zapobiega kurczeniu się paciorków */
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #111;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    opacity: 0.6; /* Lekko przygaszone domyślnie */
+}
+
+/* Styl "aktywnego" paciorka (tego pod wskaźnikiem) */
+.bead.active {
+    transform: scale(1.4); /* Powiększa aktywny paciorek */
+    opacity: 1;
+    box-shadow: 0 0 15px #fff;
+}
+
+/* --- Style poszczególnych paciorków (wg obrazka) --- */
+
+.bead.small-bead {
+    width: 25px;
+    height: 25px;
+    background-color: #ff99cc; /* Różowy */
+    border: 1px solid #c07;
+    border-radius: 50%;
+}
+
+.bead.large-bead {
+    width: 35px;
+    height: 35px;
+    background-color: #33ccff; /* Błękitny */
+    border: 1px solid #07a;
+    border-radius: 50%;
+}
+
+.bead.centerpiece {
+    width: 45px;
+    height: 35px;
+    background-color: #ffff99; /* Żółty */
+    border: 1px solid #aa0;
+    border-radius: 35%; /* Owalny */
+}
+
+.bead.crucifix {
+    width: 30px;
+    height: 50px;
+    background-color: #a67b5b; /* Brązowy */
+    border: 2px solid #634a36;
+    border-radius: 5px;
+    margin-right: 15px; /* Trochę więcej miejsca po krzyżyku */
+}
+
+/* --- Kontrolki --- */
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.controls button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.controls button:hover {
+    background-color: #777;
+}
+
+.progress {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.current-prayer {
+    margin-top: 15px;
+    font-size: 18px;
+    color: #ffc;
+    min-height: 25px;
+    text-align: center;
+}

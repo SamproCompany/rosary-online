@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Select Rosary Option</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* --- CSS Variables --- */
+  :root {
+    --primary-color: #3b82f6; /* Blue Accent */
+    --primary-hover: #2563eb;
+    --secondary-color: #10b981; /* Green for 'How to' */
+    --background-color: #f9fafb;
+    --card-background: white;
+    --text-color: #1f2937;
+    --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --border-radius-large: 16px;
+  }
+
+  /* --- Reset and Basic Styles --- */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* --- Header and Main Container --- */
+  .container {
+    max-width: 1000px;
+    width: 100%;
+    margin-top: 40px;
+    padding: 30px;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: var(--text-color);
+  }
+  
+  .subtitle {
+    text-align: center;
+    margin-bottom: 50px;
+    font-weight: 400;
+    color: #6b7280;
+    font-size: 1.1rem;
+  }
+
+  /* --- Sections for Buttons --- */
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 8px;
+  }
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+  }
+
+  /* --- Button Style (Cards) --- */
+  .option-button {
+    padding: 25px 20px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--border-radius-large);
+    color: var(--text-color);
+    background-color: var(--card-background);
+    font-weight: 600;
+    text-align: center;
+    box-shadow: var(--shadow-subtle);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+  }
+
+  .option-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* --- Special Styles for Selected Options --- */
+
+  /* Function Button Style */
+  .function-button {
+    background-color: #eff6ff; /* Light background for functions */
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+  }
+
+  .function-button:hover {
+      background-color: var(--primary-color);
+      color: white;
+  }
+
+  /* 'How to Pray' Section Style */
+  #how-to-pray {
+    background-color: #ecfdf5;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+  }
+  
+  #how-to-pray:hover {
+      background-color: var(--secondary-color);
+      color: white;
+  }
+
+  /* Icons in buttons */
+  .icon {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+  }
+
+  /* --- Media Queries for Responsiveness --- */
+  @media (max-width: 650px) {
+    .container {
+        margin-top: 20px;
+        padding: 15px;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    .button-grid {
+        grid-template-columns: 1fr;
+    }
+    .option-button {
+        padding: 20px;
+        min-height: 90px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Rosary: Options and Styles 💎</h1>
+  <p class="subtitle">Choose what you want to do or see a ready-made style.</p>
+
+  <h2 class="section-title">Main Features</h2>
+  <div class="button-grid">
+    <button class="option-button function-button" onclick="location.replace('create.html')">
+        <span class="icon">🛠️</span>
+        Create Rosary
+    </button>
+    <button class="option-button function-button" id="how-to-pray" onclick="location.replace('https://marian.org/mary/rosary/how-to-pray')">
+        <span class="icon">📖</span>
+        How to Pray the Rosary
+    </button>
+  </div>
+
+  <h2 class="section-title">Pre-made Styles (Visualizations)</h2>
+  <div class="button-grid">
+    <button class="option-button" onclick="location.replace('standard.html')">
+        <span class="icon">⚪</span>
+        Classic (Regular)
+    </button> 
+    <button class="option-button" onclick="location.replace('vatican.html')">
+        <span class="icon">⚜️</span>
+        Vatican Style
+    </button>
+    <button class="option-button" style="background-color: #e0f2fe;" onclick="location.replace('blue.html')">
+        <span class="icon" style="color: #0c4a6e;">🟦</span>
+        Oceanic (Blue)
+    </button>
+    <button class="option-button" style="background-color: #fce7f6;" onclick="location.replace('pink.html')">
+        <span class="icon" style="color: #9d174d;">🌸</span>
+        Mary’s Rose (Pink)
+    </button>
+    <button class="option-button" style="background-color: #fffbeb;" onclick="location.replace('jesen.html')">
+        <span class="icon" style="color: #d97706;">🌅</span>
+        Autumn
+    </button>
+    <button class="option-button" style="background-color: #f0fdf4;" onclick="location.replace('green.html')">
+        <span class="icon" style="color: #059669;">🌿</span>
+         Green
+    </button>
+  </div>
+</div>
+
+<script>
+  // Example function for additional behavior if needed
+  function loadContent(option) {
+    alert('Selected option: "' + option.toUpperCase().replace('-', ' ') + '". Here you would load the relevant content or style.');
+    // Example: redirect based on option
+    // if (option === 'create') { window.location.href = 'create_rosary.html'; }
+    // else if (option === 'pray') { window.location.href = 'how_to_pray.html'; }
+  }
+</script>
+
+</body>
+</html>

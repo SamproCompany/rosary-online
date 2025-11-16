@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Autumn Rosary</title>
+<style>
+/* --- COLOR VARIABLES FOR AUTUMN --- */
+:root {
+    --autumn-bg: #EAE0C8; /* Light, creamy background like autumn mist */
+    --autumn-shadow: rgba(0, 0, 0, 0.4);
+    --bead-dark: #6D4F3A; /* Chocolate Brown */
+    --bead-light: #C07C4A; /* Warm Copper */
+    --bead-accent-small: #D9531E; /* Pumpkin Orange */
+    --bead-accent-large: #9C2C0B; /* Dark Bordeaux / Caramel */
+    --crucifix-color: #8B4513; /* Chestnut Brown */
+    --status-bg: #A0522D; /* Sienna Brown */
+    --active-glow: #FFC300; /* Golden Glow */
+    --control-bg-next: #D97706; /* Dark Orange */
+    --control-bg-prev: #FBBF24; /* Light Gold */
+    --control-bg-reset: #E35C33; /* Pumpkin Red */
+}
+
+/* --- Basic Styles --- */
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+body {
+font-family: 'Poppins', sans-serif; /* Improved font */
+position: relative;
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
+min-height: 100vh;
+background-color: var(--autumn-bg); /* AUTUMN BACKGROUND */
+color: #333;
+padding-top: 50px;
+overflow: hidden;
+user-select: none;
+}
+h1 {
+color: var(--status-bg);
+font-size: 2rem;
+margin-bottom: 20px;
+}
+/* --- Status Panel --- */
+#status-bar {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+background-color: var(--status-bg); /* AUTUMN BROWN */
+color: white;
+padding: 10px 20px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 1.1rem;
+z-index: 300;
+box-shadow: 0 2px 5px var(--autumn-shadow);
+}
+
+#prayer-name {
+font-weight: bold;
+color: white;
+}
+
+/* --- Main Container --- */
+.rosary-container {
+position: absolute;
+width: 800px;
+height: 1200px;
+transition: transform 0.6s cubic-bezier(0.65, 0.05, 0.36, 1); /* Smooth transition */
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+will-change: transform;
+}
+
+/* --- Loop and Pendant (unchanged geometry) --- */
+.loop {
+position: absolute;
+top: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 760px;
+height: 760px;
+border-radius: 50%;
+}
+
+.pendant {
+position: absolute;
+top: 740px;
+left: 50%;
+transform: translateX(-50%);
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 20px;
+z-index: 5;
+}
+
+/* --- Bead Styles (Autumn colors) --- */
+.bead {
+border-radius: 50%;
+border: 2px solid var(--bead-dark); /* Dark border */
+transition: all 0.2s ease-in-out;
+cursor: pointer;
+position: relative;
+box-shadow: 2px 2px 6px var(--autumn-shadow);
+will-change: transform, box-shadow;
+}
+
+.loop .bead {
+position: absolute;
+transform: translate(-50%, -50%);
+}
+
+.pendant .bead {
+position: static;
+transform: none !important;
+}
+
+.bead.small {
+width: 36px;
+height: 36px;
+/* Gradient for small beads (Greenish) */
+background: radial-gradient(circle at 30% 30%, var(--bead-light), var(--bead-accent-small));
+}
+
+.bead.large {
+width: 50px;
+height: 50px;
+/* Gradient for large beads (Emerald/Bordeaux) */
+background: radial-gradient(circle at 30% 30%, var(--bead-light), var(--bead-accent-large));
+}
+
+/* --- Cross (Autumn metal) --- */
+.cross {
+width: 40px;
+height: 120px;
+background-color: var(--crucifix-color); /* Chestnut */
+position: relative;
+border-radius: 6px;
+cursor: pointer;
+transition: all 0.2s ease-in-out;
+margin-top: 30px;
+box-shadow: 4px 4px 10px var(--autumn-shadow);
+transform: none !important;
+border: 2px solid var(--bead-dark);
+/* Gradient for metallic/wooden effect */
+background: linear-gradient(145deg, #a0522d, #8B4513, #6d4f3a); 
+will-change: transform, box-shadow;
+}
+
+.cross::before {
+content: '';
+position: absolute;
+top: 36px;
+left: -24px;
+width: 82px;
+height: 24px;
+background-color: var(--crucifix-color);
+border-radius: 6px;
+border: 2px solid var(--bead-dark);
+background: linear-gradient(90deg, #a0522d, #8B4513, #6d4f3a); 
+}
+
+/* --- Active State (Golden glow) --- */
+.active {
+box-shadow: 0 0 30px 10px rgba(255, 195, 0, 0.7); /* Golden glow */
+border-color: var(--active-glow);
+z-index: 100;
+}
+.cross.active {
+box-shadow: 0 0 30px 10px rgba(255, 195, 0, 0.7);
+border-color: var(--active-glow);
+}
+
+/* --- Buttons (Autumn colors) --- */
+.controls {
+position: fixed;
+bottom: 40px;
+z-index: 200;
+display: flex;
+gap: 15px;
+}
+
+.control-button {
+font-size: 1.1rem; /* Smaller font so it doesn't dominate */
+padding: 15px 25px;
+color: white;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+transition: background-color 0.15s, transform 0.1s;
+font-weight: 600;
+}
+
+.control-button:hover {
+transform: translateY(-2px);
+}
+.control-button:active {
+transform: translateY(0);
+}
+
+/* --- Button Colors --- */
+#prev-bead {
+background-color: var(--control-bg-prev); /* Light Gold */
+color: var(--bead-dark); /* Dark text */
+}
+#prev-bead:hover {
+background-color: #FACC15; /* Lighter gold */
+}
+
+#next-bead {
+background-color: var(--control-bg-next); /* Dark Orange */
+}
+#next-bead:hover {
+background-color: #C24100;
+}
+
+#reset-bead {
+background-color: var(--control-bg-reset); /* Pumpkin Red */
+}
+#reset-bead:hover {
+background-color: #D9441E;
+}
+
+@media (max-width: 600px) {
+  .controls{
+    /* Keep centered at bottom on small screens */
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    gap: 10px;
+  }
+  .rosary-container{
+    /* Improved centering for small screens */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-left: 0; /* Remove old rule */
+  }
+}
+
+</style>
+</head>
+<body>
+<div id="status-bar">
+<span id="prayer-name"></span>
+<span id="counter"></span>
+</div>
+
+<div class="rosary-container" id="rosary-container">
+<div class="loop" id="loop-container">
+</div>
+<div class="pendant" id="pendant-container">
+</div>
+</div>
+
+<div class="controls">
+<button id="prev-bead" class="control-button">⬅️ Back</button>
+<button id="next-bead" class="control-button">Next ➡️</button>
+<button id="reset-bead" class="control-button">Reset</button>
+<button id="reset-bead" class="control-button" onclick="location.replace('index.html')">Home</button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+// --- DOM ELEMENTS ---
+const rosaryContainer = document.getElementById('rosary-container');
+const loopContainer = document.getElementById('loop-container');
+const pendantContainer = document.getElementById('pendant-container');
+const nextButton = document.getElementById('next-bead');
+const prevButton = document.getElementById('prev-bead');
+const resetButton = document.getElementById('reset-bead');
+const prayerNameEl = document.getElementById('prayer-name');
+const counterEl = document.getElementById('counter');
+const beadPositions = new Array(61);
+
+// --- SEQUENCE AND PRAYER NAMES ---
+const initialPendantSequence = ['large', 'small', 'small', 'small', 'large'];
+const loopSequence = [];
+for (let i = 0; i < 5; i++) {
+loopSequence.push('large');
+for (let j = 0; j < 10; j++) {
+loopSequence.push('small');
+}
+}
+const totalBeads = 61;
+let currentBeadIndex = 0;
+// Sequence of prayers for each of the 61 points (index 0 to 60)
+const prayerSequenceNames = [
+"Sign of the Cross, I Believe in God", // Index 0: Cross
+"Our Father (Intro)", // Index 1: First large bead of the rosary
+"Hail Mary (1/3)", // Index 2
+"Hail Mary (2/3)", // Index 3
+"Hail Mary (3/3)", // Index 4
+"Glory Be / Our Father (Mystery 1)", // Index 5: Second large bead (Transition to loop)
+// Loop (5 Decades)
+...Array.from({length: 5}, (_, i) => [
+`Our Father (Mystery ${i+1})`, // Large bead
+...Array(10).fill(`Hail Mary (Decade ${i+1})`), // 10 small beads
+]).flat().slice(0, 55)
+];
+
+// --- GENERATION OF THE ROSARY (Scale 2x) ---
+const scaleMultiplier = 2;
+const radius = 180 * scaleMultiplier;
+const centerX = 190 * scaleMultiplier;
+const centerY = 190 * scaleMultiplier;
+const angleIncrement = (2 * Math.PI) / loopSequence.length;
+const pendantTopOffset = 740;
+const pendantXCenter = 400;
+
+// 1. Generate the loop (Prayer indices 6 to 60)
+loopSequence.forEach((type, index) => {
+const bead = document.createElement('div');
+bead.className = `bead ${type}`;
+const prayerIndex = index + 6;
+bead.dataset.index = prayerIndex;
+
+const startAngle = (3 * Math.PI / 2) - (angleIncrement * (loopSequence.length / 2)) - angleIncrement;
+const finalAngle = startAngle + (index * angleIncrement);
+
+const x = centerX + radius * Math.cos(finalAngle);
+const y = centerY + radius * Math.sin(finalAngle);
+
+bead.style.left = `${x}px`;
+bead.style.top = `${y}px`;
+loopContainer.appendChild(bead);
+beadPositions[prayerIndex] = { x: x, y: y };
+});
+
+// 2. Generate the pendant and Cross (Prayer indices 0 to 5)
+const crossElement = document.createElement('div');
+crossElement.className = 'cross';
+crossElement.dataset.index = 0;
+pendantContainer.appendChild(crossElement);
+
+const physicalPendantBeads = [...initialPendantSequence].reverse();
+const pendantElements = [];
+
+physicalPendantBeads.forEach((type, index) => {
+const bead = document.createElement('div');
+bead.className = `bead ${type}`;
+const prayerIndex = physicalPendantBeads.length - index;
+bead.dataset.index = prayerIndex;
+pendantContainer.insertBefore(bead, crossElement);
+pendantElements.push({element: bead, index: prayerIndex, size: type === 'large' ? 50 : 36});
+});
+pendantElements.reverse();
+// Pendant positions
+pendantElements.forEach(item => {
+const beadY = item.element.offsetTop;
+beadPositions[item.index] = {
+x: pendantXCenter,
+y: pendantTopOffset + beadY + (item.size / 2)
+};
+});
+
+// Cross (Index 0)
+const crossY = crossElement.offsetTop;
+const crossHeight = 120;
+beadPositions[0] = {
+x: pendantXCenter,
+y: pendantTopOffset + crossY + (crossHeight / 2)
+};
+// --- INTERACTION, ZOOM, AND STATUS LOGIC ---
+
+function updateStatus(index) {
+ // Update the status bar
+ const prayerName = prayerSequenceNames[index];
+ prayerNameEl.textContent = `Current Prayer: ${prayerName}`;
+ counterEl.textContent = `Bead: ${index + 1} / ${totalBeads}`;
+}
+
+function zoomToActiveBead(index) {
+const viewScaleFactor = 2.0;
+const activePosition = beadPositions[index];
+if (!activePosition) return;
+
+const targetX = activePosition.x;
+const targetY = activePosition.y;
+const containerCenterX = rosaryContainer.offsetWidth / 2;
+const containerCenterY = rosaryContainer.offsetHeight / 2;
+const finalTranslateX = (containerCenterX - targetX) * viewScaleFactor;
+const finalTranslateY = (containerCenterY - targetY) * viewScaleFactor;
+
+rosaryContainer.style.transform = `
+translate(-50%, -50%)
+translate(${finalTranslateX}px, ${finalTranslateY}px)
+scale(${viewScaleFactor})
+`;
+}
+
+function highlightAndZoom(index) {
+const oldActive = document.querySelector('.active');
+if (oldActive) {
+oldActive.classList.remove('active');
+}
+
+const newActive = document.querySelector(`[data-index="${index}"]`);
+if (newActive) {
+newActive.classList.add('active');
+zoomToActiveBead(index);
+updateStatus(index);
+}
+}
+function move(direction) {
+if (direction === 'next') {
+currentBeadIndex = (currentBeadIndex + 1) % totalBeads;
+} else if (direction === 'prev') {
+currentBeadIndex = (currentBeadIndex - 1 + totalBeads) % totalBeads;
+} else if (direction === 'reset') {
+currentBeadIndex = 0;
+}
+highlightAndZoom(currentBeadIndex);
+}
+
+// --- EVENT HANDLERS ---
+// Buttons
+nextButton.addEventListener('click', () => move('next'));
+prevButton.addEventListener('click', () => move('prev'));
+resetButton.addEventListener('click', () => move('reset'));
+
+// Keyboard controls
+document.addEventListener('keydown', (event) => {
+if (event.key === 'ArrowRight' || event.key === ' ') {
+  // Space or Right Arrow -> Next
+  event.preventDefault(); // Prevent page scroll
+  move('next');
+} else if (event.key === 'ArrowLeft') {
+  // Left Arrow -> Previous
+  move('prev');
+} else if (event.key === 'Escape') {
+  // ESC -> Reset
+  move('reset');
+}
+});
+
+// Initialization
+highlightAndZoom(0);
+
+window.addEventListener('resize', () => {
+highlightAndZoom(currentBeadIndex);
+});
+
+});
+</script>
+</body>
+</html>

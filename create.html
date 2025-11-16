@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tworzenie Własnego Różańca</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  /* Zmienne CSS dla łatwej modyfikacji */
+  :root {
+    --primary-color: #3b82f6; /* Nowoczesny niebieski */
+    --primary-hover: #2563eb;
+    --background-light: #f9fafb;
+    --text-color: #1f2937;
+    --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-bead: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Reset i Podstawowe Style */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: var(--background-light);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 30px;
+  }
+
+  /* Nagłówek */
+  h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: 600;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+  }
+
+  /* Kontrolki - użycie flexbox z większym marginesem */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 50px;
+    justify-content: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-light);
+  }
+
+  .control {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+  }
+
+  label {
+    margin-bottom: 8px;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: #4b5563;
+  }
+
+  /* Style pól formularza */
+  input[type="color"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    width: 100%;
+    height: 40px;
+    background: none;
+    cursor: pointer;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    overflow: hidden; /* Ukrywa domywny border input[type="color"] */
+  }
+
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+  input[type="color"]::-moz-color-swatch-wrapper {
+    padding: 0;
+  }
+  input[type="color"]::-moz-color-swatch {
+    border: none;
+    border-radius: 6px;
+  }
+
+  /* Styl przycisku - nowoczesny, zaokrąglony, z cieniem */
+  #downloadBtn {
+    display: block;
+    margin: 0 auto 50px;
+    padding: 12px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    box-shadow: var(--shadow-light);
+    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+  }
+
+  #downloadBtn:hover {
+    background-color: var(--primary-hover);
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3), 0 4px 6px -4px rgba(59, 130, 246, 0.3);
+  }
+
+  #downloadBtn:active {
+    transform: scale(0.98);
+  }
+
+  /* Sekcja różańca */
+  #rosary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+    min-height: 300px;
+    align-items: flex-start;
+  }
+
+  /* Kulki - bardziej zaawansowany cień (shadow-bead) */
+  .bead {
+    width: 45px; /* Lekko większe */
+    height: 45px;
+    border-radius: 50%;
+    margin: 8px; /* Większy margines */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    border: 2px solid rgba(0, 0, 0, 0.1); /* Subtelniejszy border */
+    box-shadow: var(--shadow-bead);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .bead:hover {
+    transform: translateY(-2px) scale(1.05); /* Efekt uniesienia */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Krzyż - użycie gradientu dla głębi i lepszy cień */
+  .crucifix {
+    width: 25px; /* Lekko większy */
+    height: 70px;
+    margin: 5px auto;
+    border-radius: 5px;
+    position: relative;
+    /* Subtelny gradient dla metalicznego wyglądu */
+    background: linear-gradient(145deg, #a0522d, #8b4513); 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 255, 255, 0.2) inset;
+    border: 1px solid #7a3a1d;
+    transition: transform 0.3s ease;
+  }
+
+  .crucifix:hover {
+      transform: scale(1.05);
+  }
+
+  /* Responsywność dla małych ekranów */
+  @media (max-width: 600px) {
+    body {
+        padding: 15px;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+    .controls {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .control {
+        min-width: 100%;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<h1>Tworzenie Własnego Różańca 🎨🙏</h1>
+<button id="reset-bead" class="control-button" onclick="location.replace('index.html')">Home</button>
+<div class="controls">
+  <div class="control">
+    <label for="crucifixColor">Kolor Krzyża</label>
+    <input type="color" id="crucifixColor" value="#8B4513" />
+  </div>
+  <div class="control">
+    <label for="largeBeadColor">Kolor Dużej Kulki</label>
+    <input type="color" id="largeBeadColor" value="#3b82f6" />
+  </div>
+  <div class="control">
+    <label for="smallBeadColor">Kolor Małej Kulki</label>
+    <input type="color" id="smallBeadColor" value="#ef4444" />
+  </div>
+</div>
+
+<button id="downloadBtn">Pobierz Plik HTML</button>
+
+<div id="rosary"></div>
+
+<script src="create.js"></script>
+
+</body>
+</html>
