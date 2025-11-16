@@ -2,9 +2,22 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Interactive Rosary - User-Friendly</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+<title>Interactive Rosary - Responsive</title>
 <style>
+/* --- COLOR VARIABLES --- */
+:root {
+    --bead-dark-border: #5a3c3c; 
+    --bead-small-color: #7a352f;
+    --bead-large-color: #a54f46;
+    --crucifix-color: #A9A9A9; /* Silver/Gray */
+    --status-bg: rgba(24, 125, 245, 0.9);
+    --active-glow: #ffd700; /* Gold */
+    --control-next: #4CAF50; /* Green */
+    --control-prev: #007bff; /* Blue */
+    --control-reset: #dc3545; /* Red */
+}
+
 /* --- Basic Styles --- */
 * {
 box-sizing: border-box;
@@ -20,7 +33,6 @@ flex-direction: column;
 justify-content: flex-start;
 align-items: center;
 min-height: 100vh;
-/* CHANGE 1: BACKGROUND - Vatican Square Image */
 background-image: url('https://cdn.pixabay.com/photo/2013/12/31/15/17/rome-236885_1280.jpg');
 background-size: cover;
 background-position: center;
@@ -28,21 +40,21 @@ background-attachment: fixed;
 color: #333;
 padding-top: 50px;
 overflow: hidden;
-user-select: none; /* Prevent accidental text selection */
+user-select: none; 
 }
 h1 {
-color: white; /* Change text color for better visibility on background */
+color: white; 
 text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
 font-size: 2rem;
 margin-bottom: 20px;
 }
-/* --- Status Panel (NEW SECTION) --- */
+/* --- Status Panel --- */
 #status-bar {
 position: fixed;
 top: 0;
 left: 0;
 width: 100%;
-background-color: rgba(24, 125, 245, 0.9); /* Better transparency */
+background-color: var(--status-bg); 
 color: white;
 padding: 10px 20px;
 display: flex;
@@ -58,49 +70,47 @@ font-weight: bold;
 color: white;
 }
 
-/* --- Main Container --- */
+/* --- Main Container (RESPONSYWNY) --- */
 .rosary-container {
 position: absolute;
-width: 800px;
-height: 1200px;
-transition: transform 0.3s cubic-bezier(0.65, 0.05, 0.36, 1);
+width: 90vmin; /* Zmieniono z 800px */
+height: calc(1.5 * 90vmin); /* Zmieniono z 1200px (proporcja 1:1.5) */
+transition: transform 0.6s cubic-bezier(0.65, 0.05, 0.36, 1);
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 will-change: transform;
-/* Add subtle background for better visibility of the rosary on the background image */
 border-radius: 20px;
 }
 
-/* --- Circle (Loop) --- */
+/* --- Loop (w %) --- */
 .loop {
 position: absolute;
 top: 0;
 left: 50%;
 transform: translateX(-50%);
-width: 760px;
-height: 760px;
+width: 95%; /* 760/800 = 95% */
+height: 63.33%; /* 760/1200 = 63.33% */
 border-radius: 50%;
 }
 
-/* --- Pendant (Lower part) --- */
+/* --- Pendant (w %) --- */
 .pendant {
 position: absolute;
-top: 740px;
+top: 61.66%; /* 740/1200 = 61.66% */
 left: 50%;
 transform: translateX(-50%);
 display: flex;
 flex-direction: column;
 align-items: center;
-gap: 20px;
+gap: 2.5vmin; /* Zmieniono z 20px na VMIN */
 z-index: 5;
 }
 
-/* --- Bead Styles --- */
+/* --- Bead Styles (w VMIN) --- */
 .bead {
 border-radius: 50%;
-/* CHANGE 2: Bead color to reddish-brown */
-border: 2px solid #5a3c3c; 
+border: 2px solid var(--bead-dark-border); 
 transition: all 0.2s ease-in-out;
 cursor: pointer;
 position: relative;
@@ -119,101 +129,121 @@ transform: none !important;
 }
 
 .bead.small {
-width: 36px;
-height: 36px;
-/* Gradient shading for small beads */
-background: radial-gradient(circle at 30% 30%, #a54f46, #7a352f);
+width: 4.5vmin; /* Zmieniono z 36px na VMIN */
+height: 4.5vmin;
+background: radial-gradient(circle at 30% 30%, var(--bead-large-color), var(--bead-small-color));
 }
 
 .bead.large {
-width: 50px;
-height: 50px;
-/* Gradient shading for large beads */
-background: radial-gradient(circle at 30% 30%, #a54f46, #7a352f);
+width: 6.25vmin; /* Zmieniono z 50px na VMIN */
+height: 6.25vmin;
+background: radial-gradient(circle at 30% 30%, var(--bead-large-color), var(--bead-small-color));
 }
 
-/* --- Cross --- */
+/* --- Cross (w VMIN) --- */
 .cross {
-width: 40px;
-height: 120px;
-/* CHANGE 3: Metal color (cross and chain) to silver/gray */
-background-color: #A9A9A9;
+width: 5vmin; /* Zmieniono z 40px na VMIN */
+height: 15vmin; /* Zmieniono z 120px na VMIN */
+background-color: var(--crucifix-color);
 position: relative;
 border-radius: 6px;
 cursor: pointer;
 transition: all 0.2s ease-in-out;
-margin-top: 30px;
+margin-top: 3.75vmin; /* Zmieniono z 30px na VMIN */
 box-shadow: 4px 4px 10px rgba(0,0,0,0.4);
 transform: none !important;
-border: 2px solid #5a3c3c; /* Darker border */
-will-change: transform, box-shadow;
+border: 2px solid var(--bead-dark-border); 
 }
 
 .cross::before {
 content: '';
 position: absolute;
-top: 36px;
-left: -24px;
-width: 82px;
-height: 24px;
-background-color: #A9A9A9;
+top: 30%; /* 36px / 120px */
+left: -60%; /* -24px / 40px */
+width: 205%; 
+height: 20%; 
+background-color: var(--crucifix-color);
 border-radius: 6px;
-border: 2px solid #5a3c3c;
+border: 2px solid var(--bead-dark-border);
 }
 
 /* --- Active State (Highlight) --- */
 .active {
 box-shadow: 0 0 30px 10px rgba(255, 215, 0, 0.7);
-border-color: #ffd700;
+border-color: var(--active-glow);
 z-index: 100;
 }
 .cross.active {
 box-shadow: 0 0 30px 10px rgba(255, 215, 0, 0.7);
-border-color: #ffd700;
+border-color: var(--active-glow);
 }
 
-/* --- Buttons (NEW SECTION) --- */
+/* --- Buttons (RESPONSYWNE) --- */
 .controls {
 position: fixed;
 bottom: 40px;
 z-index: 200;
 display: flex;
 gap: 15px;
+left: 50%;
+transform: translateX(-50%);
+width: 90%;
+justify-content: center;
 }
 
 .control-button {
-font-size: 1.5rem;
-padding: 15px 30px;
-background-color: #4CAF50;
+font-size: 1.1rem;
+padding: 10px 15px;
 color: white;
 border: none;
 border-radius: 10px;
 cursor: pointer;
 box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-transition: background-color 0.15s;
+transition: background-color 0.15s, transform 0.1s;
+font-weight: 600;
+white-space: nowrap;
 }
 
 .control-button:hover {
+transform: translateY(-2px);
+}
+.control-button:active {
+transform: translateY(0);
+}
+
+#next-bead {
+background-color: var(--control-next); 
+}
+#next-bead:hover {
 background-color: #45a049;
 }
 #prev-bead {
-background-color: #007bff;
+background-color: var(--control-prev); 
 }
 #prev-bead:hover {
 background-color: #0056b3;
 }
 #reset-bead {
-background-color: #dc3545;
+background-color: var(--control-reset); 
 }
 #reset-bead:hover {
 background-color: #c82333;
 }
+
+/* Media Query dla małych ekranów */
 @media (max-width: 600px) {
   .controls{
-    margin-left: 50vw;
+    bottom: 20px;
+    width: 95%;
+    gap: 8px;
+    margin-left: 0; 
   }
   .rosary-container{
-    margin-left: 35vw;
+    margin-left: 0;
+  }
+  .control-button {
+    font-size: 0.9rem;
+    padding: 8px 10px;
   }
 }
 </style>
@@ -225,7 +255,6 @@ background-color: #c82333;
 </div>
 
 
-
 <div class="rosary-container" id="rosary-container">
 <div class="loop" id="loop-container"></div>
 <div class="pendant" id="pendant-container"></div>
@@ -235,7 +264,7 @@ background-color: #c82333;
 <button id="prev-bead" class="control-button">⬅️ Back</button>
 <button id="next-bead" class="control-button">Next ➡️</button>
 <button id="reset-bead" class="control-button">Reset</button>
-<button id="reset-bead" class="control-button" onclick="location.replace('index.html')">Home</button>
+<button class="control-button" onclick="location.replace('index.html')">🏠 Home</button>
 </div>
 
 <script>
@@ -252,6 +281,22 @@ const prayerNameEl = document.getElementById('prayer-name');
 const counterEl = document.getElementById('counter');
 const beadPositions = new Array(61);
 
+// --- STAŁE BAZOWE (OPARTE NA SKALI 800x1200px) ---
+const ROSARY_WIDTH_BASE = 800;
+// Promień pętli koralików (dla geometrycznego środka pętli, oryginalnie 360px)
+const RADIUS_INNER_BASE = 360; 
+const LOOP_CENTER_X_BASE = 400; 
+const LOOP_CENTER_Y_BASE = 380; 
+const PENDANT_TOP_OFFSET_BASE = 740; // Początek wisiora
+const PENDANT_X_CENTER_BASE = 400; 
+
+// --- DYNAMICZNE OBLICZANIE SKALI ---
+function calculateScaleFactor() {
+    // Współczynnik skalowania: bieżący rozmiar kontenera / rozmiar bazowy
+    const currentContainerWidth = rosaryContainer.offsetWidth;
+    return currentContainerWidth / ROSARY_WIDTH_BASE;
+}
+
 // --- SEQUENCE AND PRAYER NAMES ---
 const initialPendantSequence = ['large', 'small', 'small', 'small', 'large'];
 const loopSequence = [];
@@ -263,88 +308,98 @@ loopSequence.push('small');
 }
 const totalBeads = 61;
 let currentBeadIndex = 0;
-// Sequence of prayers for each of the 61 points (index 0 to 60)
+
 const prayerSequenceNames = [
 "Sign of the Cross, I Believe in God", // Index 0: Cross
-"Our Father (Intro)", // Index 1: First large bead of the rosary
-"Hail Mary (1/3)", // Index 2
-"Hail Mary (2/3)", // Index 3
-"Hail Mary (3/3)", // Index 4
-"Glory Be / Our Father (Mystery 1)", // Index 5: Second large bead (Transition to loop)
-// Loop (5 Decades)
+"Our Father (Intro)", 
+"Hail Mary (1/3)", 
+"Hail Mary (2/3)", 
+"Hail Mary (3/3)", 
+"Glory Be / Our Father (Mystery 1)", 
 ...Array.from({length: 5}, (_, i) => [
-`Our Father (Mystery ${i+1})`, // Large bead
-...Array(10).fill(`Hail Mary (Decade ${i+1})`), // 10 small beads
+`Our Father (Mystery ${i+1})`, 
+...Array(10).fill(`Hail Mary (Decade ${i+1})`), 
 ]).flat().slice(0, 55)
 ];
 
-// --- GENERATE THE ROSARY (Scale 2x) ---
-const scaleMultiplier = 2;
-const radius = 180 * scaleMultiplier;
-const centerX = 190 * scaleMultiplier;
-const centerY = 190 * scaleMultiplier;
-const angleIncrement = (2 * Math.PI) / loopSequence.length;
-const pendantTopOffset = 740;
-const pendantXCenter = 400;
+// --- GENEROWANIE RÓŻAŃCA (RESPONSYWNE) ---
+function generateRosary() {
+    // Wyczyść kontenery
+    loopContainer.innerHTML = '';
+    pendantContainer.innerHTML = '';
+    
+    const scale = calculateScaleFactor();
+    
+    // Dynamicznie skalowane wymiary dla pozycjonowania
+    const radius = RADIUS_INNER_BASE * scale;
+    const centerX = LOOP_CENTER_X_BASE * scale;
+    const centerY = LOOP_CENTER_Y_BASE * scale;
+    const angleIncrement = (2 * Math.PI) / loopSequence.length;
+    const pendantTopOffset = PENDANT_TOP_OFFSET_BASE * scale;
+    const pendantXCenter = PENDANT_X_CENTER_BASE * scale;
 
-// 1. Generate the loop (indices 6 to 60)
-loopSequence.forEach((type, index) => {
-const bead = document.createElement('div');
-bead.className = `bead ${type}`;
-const prayerIndex = index + 6;
-bead.dataset.index = prayerIndex;
 
-const startAngle = (3 * Math.PI / 2) - (angleIncrement * (loopSequence.length / 2)) - angleIncrement;
-const finalAngle = startAngle + (index * angleIncrement);
+    // 1. Generowanie pętli (Indeksy modlitwy 6 do 60)
+    loopSequence.forEach((type, index) => {
+        const bead = document.createElement('div');
+        bead.className = `bead ${type}`;
+        const prayerIndex = index + 6;
+        bead.dataset.index = prayerIndex;
 
-const x = centerX + radius * Math.cos(finalAngle);
-const y = centerY + radius * Math.sin(finalAngle);
+        const startAngle = (3 * Math.PI / 2) - (angleIncrement * (loopSequence.length / 2)) - angleIncrement;
+        const finalAngle = startAngle + (index * angleIncrement);
 
-bead.style.left = `${x}px`;
-bead.style.top = `${y}px`;
-loopContainer.appendChild(bead);
-beadPositions[prayerIndex] = { x: x, y: y };
-});
+        const x = centerX + radius * Math.cos(finalAngle);
+        const y = centerY + radius * Math.sin(finalAngle);
 
-// 2. Generate the pendant and cross (indices 0 to 5)
-const crossElement = document.createElement('div');
-crossElement.className = 'cross';
-crossElement.dataset.index = 0;
-pendantContainer.appendChild(crossElement);
+        bead.style.left = `${x}px`;
+        bead.style.top = `${y}px`;
+        loopContainer.appendChild(bead);
+        beadPositions[prayerIndex] = { x: x, y: y };
+    });
 
-const physicalPendantBeads = [...initialPendantSequence].reverse();
-const pendantElements = [];
+    // 2. Generowanie wisiora i Krzyża (Indeksy modlitwy 0 do 5)
+    const crossElement = document.createElement('div');
+    crossElement.className = 'cross';
+    crossElement.dataset.index = 0;
+    pendantContainer.appendChild(crossElement);
 
-physicalPendantBeads.forEach((type, index) => {
-const bead = document.createElement('div');
-bead.className = `bead ${type}`;
-const prayerIndex = physicalPendantBeads.length - index;
-bead.dataset.index = prayerIndex;
-pendantContainer.insertBefore(bead, crossElement);
-pendantElements.push({element: bead, index: prayerIndex, size: type === 'large' ? 50 : 36});
-});
-pendantElements.reverse();
+    const physicalPendantBeads = [...initialPendantSequence].reverse();
 
-// Pendant positions
-pendantElements.forEach(item => {
-const beadY = item.element.offsetTop;
-beadPositions[item.index] = {
-x: pendantXCenter,
-y: pendantTopOffset + beadY + (item.size / 2)
-};
-});
+    physicalPendantBeads.forEach((type, index) => {
+        const bead = document.createElement('div');
+        bead.className = `bead ${type}`;
+        const prayerIndex = physicalPendantBeads.length - index;
+        bead.dataset.index = prayerIndex;
+        pendantContainer.insertBefore(bead, crossElement);
+    });
+    
+    // Obliczenie pozycji koralików wisiora (po dodaniu do DOM)
+    const beadsInPendant = pendantContainer.querySelectorAll('.bead');
+    let currentPendantIndex = 5;
+    beadsInPendant.forEach(beadEl => {
+        const beadY = beadEl.offsetTop;
+        beadPositions[currentPendantIndex] = {
+            x: pendantXCenter,
+            y: pendantTopOffset + beadY + (beadEl.offsetHeight / 2)
+        };
+        currentPendantIndex--;
+    });
 
-// Cross (index 0)
-const crossY = crossElement.offsetTop;
-const crossHeight = 120;
-beadPositions[0] = {
-x: pendantXCenter,
-y: pendantTopOffset + crossY + (crossHeight / 2)
-};
+    // Krzyż (Index 0)
+    const crossY = crossElement.offsetTop;
+    beadPositions[0] = {
+        x: pendantXCenter,
+        y: pendantTopOffset + crossY + (crossElement.offsetHeight / 2)
+    };
+    
+    // Podświetl aktywny koralik
+    highlightAndZoom(currentBeadIndex);
+}
 
-// --- INTERACTION, ZOOM, AND STATUS ---
+// --- INTERACTION, ZOOM, AND STATUS LOGIC ---
+
 function updateStatus(index) {
- // Update status bar
  const prayerName = prayerSequenceNames[index];
  prayerNameEl.textContent = `Current Prayer: ${prayerName}`;
  counterEl.textContent = `Bead: ${index + 1} / ${totalBeads}`;
@@ -355,10 +410,15 @@ const viewScaleFactor = 2.0;
 const activePosition = beadPositions[index];
 if (!activePosition) return;
 
+const containerWidth = rosaryContainer.offsetWidth;
+const containerHeight = rosaryContainer.offsetHeight;
+
 const targetX = activePosition.x;
 const targetY = activePosition.y;
-const containerCenterX = rosaryContainer.offsetWidth / 2;
-const containerCenterY = rosaryContainer.offsetHeight / 2;
+
+const containerCenterX = containerWidth / 2;
+const containerCenterY = containerHeight / 2;
+
 const finalTranslateX = (containerCenterX - targetX) * viewScaleFactor;
 const finalTranslateY = (containerCenterY - targetY) * viewScaleFactor;
 
@@ -403,7 +463,7 @@ resetButton.addEventListener('click', () => move('reset'));
 // Keyboard controls
 document.addEventListener('keydown', (event) => {
 if (event.key === 'ArrowRight' || event.key === ' ') {
-  event.preventDefault(); // Prevent page scroll
+  event.preventDefault(); 
   move('next');
 } else if (event.key === 'ArrowLeft') {
   move('prev');
@@ -412,11 +472,12 @@ if (event.key === 'ArrowRight' || event.key === ' ') {
 }
 });
 
-// Initialization
-highlightAndZoom(0);
+// Initialization: Generujemy różaniec i aktywujemy początkowy koralik
+generateRosary();
 
+// Zdarzenie 'resize' musi wywołać ponowne wygenerowanie i wyśrodkowanie
 window.addEventListener('resize', () => {
-highlightAndZoom(currentBeadIndex);
+    generateRosary();
 });
 
 });
