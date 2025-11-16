@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Autumn Rosary</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Autumn Rosary (Responsive)</title>
 <style>
 /* --- COLOR VARIABLES FOR AUTUMN --- */
 :root {
@@ -29,14 +29,14 @@ padding: 0;
 }
 
 body {
-font-family: 'Poppins', sans-serif; /* Improved font */
+font-family: 'Poppins', sans-serif;
 position: relative;
 display: flex;
 flex-direction: column;
 justify-content: flex-start;
 align-items: center;
 min-height: 100vh;
-background-color: var(--autumn-bg); /* AUTUMN BACKGROUND */
+background-color: var(--autumn-bg);
 color: #333;
 padding-top: 50px;
 overflow: hidden;
@@ -53,7 +53,7 @@ position: fixed;
 top: 0;
 left: 0;
 width: 100%;
-background-color: var(--status-bg); /* AUTUMN BROWN */
+background-color: var(--status-bg);
 color: white;
 padding: 10px 20px;
 display: flex;
@@ -69,45 +69,46 @@ font-weight: bold;
 color: white;
 }
 
-/* --- Main Container --- */
+/* --- Main Container (RESPONSYWNY) --- */
 .rosary-container {
 position: absolute;
-width: 800px;
-height: 1200px;
-transition: transform 0.6s cubic-bezier(0.65, 0.05, 0.36, 1); /* Smooth transition */
+width: 90vmin; /* Zmieniono z 800px na VMIN */
+height: calc(1.5 * 90vmin); /* Zmieniono z 1200px (proporcja 1:1.5) */
+transition: transform 0.6s cubic-bezier(0.65, 0.05, 0.36, 1);
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 will-change: transform;
+z-index: 100;
 }
 
-/* --- Loop and Pendant (unchanged geometry) --- */
+/* --- Loop and Pendant (w %) --- */
 .loop {
 position: absolute;
 top: 0;
 left: 50%;
 transform: translateX(-50%);
-width: 760px;
-height: 760px;
+width: 95%; /* 760/800 = 95% */
+height: 63.33%; /* 760/1200 = 63.33% */
 border-radius: 50%;
 }
 
 .pendant {
 position: absolute;
-top: 740px;
+top: 61.66%; /* 740/1200 = 61.66% */
 left: 50%;
 transform: translateX(-50%);
 display: flex;
 flex-direction: column;
 align-items: center;
-gap: 20px;
+gap: 2.5vmin; /* Zmieniono z 20px na VMIN */
 z-index: 5;
 }
 
-/* --- Bead Styles (Autumn colors) --- */
+/* --- Bead Styles (w VMIN) --- */
 .bead {
 border-radius: 50%;
-border: 2px solid var(--bead-dark); /* Dark border */
+border: 2px solid var(--bead-dark);
 transition: all 0.2s ease-in-out;
 cursor: pointer;
 position: relative;
@@ -126,33 +127,30 @@ transform: none !important;
 }
 
 .bead.small {
-width: 36px;
-height: 36px;
-/* Gradient for small beads (Greenish) */
+width: 4.5vmin; /* Zmieniono z 36px na VMIN */
+height: 4.5vmin;
 background: radial-gradient(circle at 30% 30%, var(--bead-light), var(--bead-accent-small));
 }
 
 .bead.large {
-width: 50px;
-height: 50px;
-/* Gradient for large beads (Emerald/Bordeaux) */
+width: 6.25vmin; /* Zmieniono z 50px na VMIN */
+height: 6.25vmin;
 background: radial-gradient(circle at 30% 30%, var(--bead-light), var(--bead-accent-large));
 }
 
-/* --- Cross (Autumn metal) --- */
+/* --- Cross (w VMIN) --- */
 .cross {
-width: 40px;
-height: 120px;
-background-color: var(--crucifix-color); /* Chestnut */
+width: 5vmin; /* Zmieniono z 40px na VMIN */
+height: 15vmin; /* Zmieniono z 120px na VMIN */
+background-color: var(--crucifix-color); 
 position: relative;
 border-radius: 6px;
 cursor: pointer;
 transition: all 0.2s ease-in-out;
-margin-top: 30px;
+margin-top: 3.75vmin; /* Zmieniono z 30px na VMIN */
 box-shadow: 4px 4px 10px var(--autumn-shadow);
 transform: none !important;
 border: 2px solid var(--bead-dark);
-/* Gradient for metallic/wooden effect */
 background: linear-gradient(145deg, #a0522d, #8B4513, #6d4f3a); 
 will-change: transform, box-shadow;
 }
@@ -160,10 +158,10 @@ will-change: transform, box-shadow;
 .cross::before {
 content: '';
 position: absolute;
-top: 36px;
-left: -24px;
-width: 82px;
-height: 24px;
+top: 30%; /* 36px / 120px */
+left: -60%; /* -24px / 40px */
+width: 205%; 
+height: 20%; 
 background-color: var(--crucifix-color);
 border-radius: 6px;
 border: 2px solid var(--bead-dark);
@@ -172,7 +170,7 @@ background: linear-gradient(90deg, #a0522d, #8B4513, #6d4f3a);
 
 /* --- Active State (Golden glow) --- */
 .active {
-box-shadow: 0 0 30px 10px rgba(255, 195, 0, 0.7); /* Golden glow */
+box-shadow: 0 0 30px 10px rgba(255, 195, 0, 0.7); 
 border-color: var(--active-glow);
 z-index: 100;
 }
@@ -181,18 +179,22 @@ box-shadow: 0 0 30px 10px rgba(255, 195, 0, 0.7);
 border-color: var(--active-glow);
 }
 
-/* --- Buttons (Autumn colors) --- */
+/* --- Buttons (Responsywne) --- */
 .controls {
 position: fixed;
 bottom: 40px;
 z-index: 200;
 display: flex;
 gap: 15px;
+left: 50%;
+transform: translateX(-50%);
+width: 90%; 
+justify-content: center;
 }
 
 .control-button {
-font-size: 1.1rem; /* Smaller font so it doesn't dominate */
-padding: 15px 25px;
+font-size: 1rem; 
+padding: 10px 15px;
 color: white;
 border: none;
 border-radius: 10px;
@@ -200,6 +202,7 @@ cursor: pointer;
 box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 transition: background-color 0.15s, transform 0.1s;
 font-weight: 600;
+white-space: nowrap; /* Zapobiega łamaniu się tekstu na mniejszych ekranach */
 }
 
 .control-button:hover {
@@ -211,22 +214,22 @@ transform: translateY(0);
 
 /* --- Button Colors --- */
 #prev-bead {
-background-color: var(--control-bg-prev); /* Light Gold */
-color: var(--bead-dark); /* Dark text */
+background-color: var(--control-bg-prev); 
+color: var(--bead-dark); 
 }
 #prev-bead:hover {
-background-color: #FACC15; /* Lighter gold */
+background-color: #FACC15; 
 }
 
 #next-bead {
-background-color: var(--control-bg-next); /* Dark Orange */
+background-color: var(--control-bg-next); 
 }
 #next-bead:hover {
 background-color: #C24100;
 }
 
 #reset-bead {
-background-color: var(--control-bg-reset); /* Pumpkin Red */
+background-color: var(--control-bg-reset); 
 }
 #reset-bead:hover {
 background-color: #D9441E;
@@ -234,18 +237,13 @@ background-color: #D9441E;
 
 @media (max-width: 600px) {
   .controls{
-    /* Keep centered at bottom on small screens */
     bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    gap: 10px;
+    width: 95%; 
+    gap: 8px;
   }
-  .rosary-container{
-    /* Improved centering for small screens */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin-left: 0; /* Remove old rule */
+  .control-button {
+    font-size: 0.9rem;
+    padding: 8px 10px;
   }
 }
 
@@ -268,7 +266,7 @@ background-color: #D9441E;
 <button id="prev-bead" class="control-button">⬅️ Back</button>
 <button id="next-bead" class="control-button">Next ➡️</button>
 <button id="reset-bead" class="control-button">Reset</button>
-<button id="reset-bead" class="control-button" onclick="location.replace('index.html')">Home</button>
+<button class="control-button" onclick="location.replace('index.html')">🏠 Home</button>
 </div>
 
 <script>
@@ -285,6 +283,24 @@ const prayerNameEl = document.getElementById('prayer-name');
 const counterEl = document.getElementById('counter');
 const beadPositions = new Array(61);
 
+// --- STAŁE BAZOWE (OPARTE NA SKALI 800x1200px) ---
+// Te wartości służą do dynamicznego skalowania w generateRosary()
+const ROSARY_WIDTH_BASE = 800;
+// W oparciu o geometrię 760x760 pętli w kontenerze 800x1200:
+const LOOP_DIAMETER_BASE = 760;
+const RADIUS_INNER_BASE = 340; // 380 (promień pętli) - 40 (dla marginesu koralików) = 340
+const LOOP_CENTER_X_BASE = 400; // 800 / 2
+const LOOP_CENTER_Y_BASE = 380; // 760 / 2
+const PENDANT_TOP_OFFSET_BASE = 740; // Początek wisiora
+const PENDANT_X_CENTER_BASE = 400; 
+
+// --- DYNAMICZNE OBLICZANIE SKALI ---
+function calculateScaleFactor() {
+    // Współczynnik skalowania: bieżący rozmiar kontenera / rozmiar bazowy
+    const currentContainerWidth = rosaryContainer.offsetWidth;
+    return currentContainerWidth / ROSARY_WIDTH_BASE;
+}
+
 // --- SEQUENCE AND PRAYER NAMES ---
 const initialPendantSequence = ['large', 'small', 'small', 'small', 'large'];
 const loopSequence = [];
@@ -296,87 +312,99 @@ loopSequence.push('small');
 }
 const totalBeads = 61;
 let currentBeadIndex = 0;
-// Sequence of prayers for each of the 61 points (index 0 to 60)
+
 const prayerSequenceNames = [
-"Sign of the Cross, I Believe in God", // Index 0: Cross
-"Our Father (Intro)", // Index 1: First large bead of the rosary
-"Hail Mary (1/3)", // Index 2
-"Hail Mary (2/3)", // Index 3
-"Hail Mary (3/3)", // Index 4
-"Glory Be / Our Father (Mystery 1)", // Index 5: Second large bead (Transition to loop)
-// Loop (5 Decades)
+"Sign of the Cross, I Believe in God", 
+"Our Father (Intro)", 
+"Hail Mary (1/3)", 
+"Hail Mary (2/3)", 
+"Hail Mary (3/3)", 
+"Glory Be / Our Father (Mystery 1)", 
 ...Array.from({length: 5}, (_, i) => [
-`Our Father (Mystery ${i+1})`, // Large bead
-...Array(10).fill(`Hail Mary (Decade ${i+1})`), // 10 small beads
+`Our Father (Mystery ${i+1})`, 
+...Array(10).fill(`Hail Mary (Decade ${i+1})`), 
 ]).flat().slice(0, 55)
 ];
 
-// --- GENERATION OF THE ROSARY (Scale 2x) ---
-const scaleMultiplier = 2;
-const radius = 180 * scaleMultiplier;
-const centerX = 190 * scaleMultiplier;
-const centerY = 190 * scaleMultiplier;
-const angleIncrement = (2 * Math.PI) / loopSequence.length;
-const pendantTopOffset = 740;
-const pendantXCenter = 400;
+// --- GENEROWANIE RÓŻAŃCA (RESPONSYWNE) ---
+function generateRosary() {
+    // Wyczyść kontenery
+    loopContainer.innerHTML = '';
+    pendantContainer.innerHTML = '';
+    
+    // Pobranie dynamicznej skali
+    const scale = calculateScaleFactor();
+    
+    // Dynamicznie skalowane wymiary dla pozycjonowania
+    const radius = RADIUS_INNER_BASE * scale;
+    const centerX = LOOP_CENTER_X_BASE * scale;
+    const centerY = LOOP_CENTER_Y_BASE * scale;
+    const angleIncrement = (2 * Math.PI) / loopSequence.length;
+    const pendantTopOffset = PENDANT_TOP_OFFSET_BASE * scale;
+    const pendantXCenter = PENDANT_X_CENTER_BASE * scale;
 
-// 1. Generate the loop (Prayer indices 6 to 60)
-loopSequence.forEach((type, index) => {
-const bead = document.createElement('div');
-bead.className = `bead ${type}`;
-const prayerIndex = index + 6;
-bead.dataset.index = prayerIndex;
 
-const startAngle = (3 * Math.PI / 2) - (angleIncrement * (loopSequence.length / 2)) - angleIncrement;
-const finalAngle = startAngle + (index * angleIncrement);
+    // 1. Generowanie pętli (Indeksy modlitwy 6 do 60)
+    loopSequence.forEach((type, index) => {
+        const bead = document.createElement('div');
+        bead.className = `bead ${type}`;
+        const prayerIndex = index + 6;
+        bead.dataset.index = prayerIndex;
 
-const x = centerX + radius * Math.cos(finalAngle);
-const y = centerY + radius * Math.sin(finalAngle);
+        const startAngle = (3 * Math.PI / 2) - (angleIncrement * (loopSequence.length / 2)) - angleIncrement;
+        const finalAngle = startAngle + (index * angleIncrement);
 
-bead.style.left = `${x}px`;
-bead.style.top = `${y}px`;
-loopContainer.appendChild(bead);
-beadPositions[prayerIndex] = { x: x, y: y };
-});
+        const x = centerX + radius * Math.cos(finalAngle);
+        const y = centerY + radius * Math.sin(finalAngle);
 
-// 2. Generate the pendant and Cross (Prayer indices 0 to 5)
-const crossElement = document.createElement('div');
-crossElement.className = 'cross';
-crossElement.dataset.index = 0;
-pendantContainer.appendChild(crossElement);
+        bead.style.left = `${x}px`;
+        bead.style.top = `${y}px`;
+        loopContainer.appendChild(bead);
+        beadPositions[prayerIndex] = { x: x, y: y };
+    });
 
-const physicalPendantBeads = [...initialPendantSequence].reverse();
-const pendantElements = [];
+    // 2. Generowanie wisiora i Krzyża (Indeksy modlitwy 0 do 5)
+    const crossElement = document.createElement('div');
+    crossElement.className = 'cross';
+    crossElement.dataset.index = 0;
+    pendantContainer.appendChild(crossElement);
 
-physicalPendantBeads.forEach((type, index) => {
-const bead = document.createElement('div');
-bead.className = `bead ${type}`;
-const prayerIndex = physicalPendantBeads.length - index;
-bead.dataset.index = prayerIndex;
-pendantContainer.insertBefore(bead, crossElement);
-pendantElements.push({element: bead, index: prayerIndex, size: type === 'large' ? 50 : 36});
-});
-pendantElements.reverse();
-// Pendant positions
-pendantElements.forEach(item => {
-const beadY = item.element.offsetTop;
-beadPositions[item.index] = {
-x: pendantXCenter,
-y: pendantTopOffset + beadY + (item.size / 2)
-};
-});
+    const physicalPendantBeads = [...initialPendantSequence].reverse();
 
-// Cross (Index 0)
-const crossY = crossElement.offsetTop;
-const crossHeight = 120;
-beadPositions[0] = {
-x: pendantXCenter,
-y: pendantTopOffset + crossY + (crossHeight / 2)
-};
+    physicalPendantBeads.forEach((type, index) => {
+        const bead = document.createElement('div');
+        bead.className = `bead ${type}`;
+        const prayerIndex = physicalPendantBeads.length - index;
+        bead.dataset.index = prayerIndex;
+        pendantContainer.insertBefore(bead, crossElement);
+    });
+    
+    // Obliczenie pozycji koralików wisiora (po dodaniu do DOM)
+    const beadsInPendant = pendantContainer.querySelectorAll('.bead');
+    let currentPendantIndex = 5;
+    beadsInPendant.forEach(beadEl => {
+        const beadY = beadEl.offsetTop;
+        beadPositions[currentPendantIndex] = {
+            x: pendantXCenter,
+            // Musimy dodać połowę wysokości, aby punktem aktywnym był środek koralika
+            y: pendantTopOffset + beadY + (beadEl.offsetHeight / 2)
+        };
+        currentPendantIndex--;
+    });
+
+    // Krzyż (Index 0)
+    const crossY = crossElement.offsetTop;
+    beadPositions[0] = {
+        x: pendantXCenter,
+        y: pendantTopOffset + crossY + (crossElement.offsetHeight / 2)
+    };
+    
+    // Podświetl aktywny koralik
+    highlightAndZoom(currentBeadIndex);
+}
 // --- INTERACTION, ZOOM, AND STATUS LOGIC ---
 
 function updateStatus(index) {
- // Update the status bar
  const prayerName = prayerSequenceNames[index];
  prayerNameEl.textContent = `Current Prayer: ${prayerName}`;
  counterEl.textContent = `Bead: ${index + 1} / ${totalBeads}`;
@@ -387,10 +415,15 @@ const viewScaleFactor = 2.0;
 const activePosition = beadPositions[index];
 if (!activePosition) return;
 
+const containerWidth = rosaryContainer.offsetWidth;
+const containerHeight = rosaryContainer.offsetHeight;
+
 const targetX = activePosition.x;
 const targetY = activePosition.y;
-const containerCenterX = rosaryContainer.offsetWidth / 2;
-const containerCenterY = rosaryContainer.offsetHeight / 2;
+
+const containerCenterX = containerWidth / 2;
+const containerCenterY = containerHeight / 2;
+
 const finalTranslateX = (containerCenterX - targetX) * viewScaleFactor;
 const finalTranslateY = (containerCenterY - targetY) * viewScaleFactor;
 
@@ -426,7 +459,6 @@ highlightAndZoom(currentBeadIndex);
 }
 
 // --- EVENT HANDLERS ---
-// Buttons
 nextButton.addEventListener('click', () => move('next'));
 prevButton.addEventListener('click', () => move('prev'));
 resetButton.addEventListener('click', () => move('reset'));
@@ -434,23 +466,22 @@ resetButton.addEventListener('click', () => move('reset'));
 // Keyboard controls
 document.addEventListener('keydown', (event) => {
 if (event.key === 'ArrowRight' || event.key === ' ') {
-  // Space or Right Arrow -> Next
-  event.preventDefault(); // Prevent page scroll
+  event.preventDefault(); 
   move('next');
 } else if (event.key === 'ArrowLeft') {
-  // Left Arrow -> Previous
   move('prev');
 } else if (event.key === 'Escape') {
-  // ESC -> Reset
   move('reset');
 }
 });
 
-// Initialization
-highlightAndZoom(0);
+// Initializacja
+generateRosary();
 
+// Zdarzenie 'resize' musi wywołać ponowne wygenerowanie i wyśrodkowanie
 window.addEventListener('resize', () => {
-highlightAndZoom(currentBeadIndex);
+    generateRosary();
+    highlightAndZoom(currentBeadIndex);
 });
 
 });
