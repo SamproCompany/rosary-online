@@ -60,7 +60,7 @@ color: white;
 position: absolute;
 width: 90vmin; /* Używamy mniejszej z wartości viewportu (vh lub vw) */
 height: calc(1.5 * 90vmin); /* Proporcja 800:1200 to 1:1.5 */
-transition: transform 0.3s cubic-bezier(0.65, 0.05, 0.36, 1);
+transition: transform 0.6s cubic-bezier(0.65, 0.05, 0.36, 1);
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
@@ -372,30 +372,27 @@ function updateStatus(index) {
 }
 
 function zoomToActiveBead(index) {
-    const viewScaleFactor = 2.0;
-    const activePosition = beadPositions[index];
-    if (!activePosition) return;
+const viewScaleFactor = 2.0;
+const activePosition = beadPositions[index];
+if (!activePosition) return;
 
-    // Pobierz rzeczywisty rozmiar kontenera
-    const containerWidth = rosaryContainer.offsetWidth;
-    const containerHeight = rosaryContainer.offsetHeight;
+const containerWidth = rosaryContainer.offsetWidth;
+const containerHeight = rosaryContainer.offsetHeight;
 
-    const targetX = activePosition.x;
-    const targetY = activePosition.y;
-    
-    const containerCenterX = containerWidth / 2;
-    const containerCenterY = containerHeight / 2;
-    
-    // Oblicz translację, aby aktywny koralik był w centrum widoku
-    const finalTranslateX = (containerCenterX - targetX) * viewScaleFactor;
-    const finalTranslateY = (containerCenterY - targetY) * viewScaleFactor;
+const targetX = activePosition.x;
+const targetY = activePosition.y;
 
-    // Zastosuj przekształcenie (zoom i przesunięcie)
-    rosaryContainer.style.transform = `
-    translate(-50%, -50%)
-    translate(${finalTranslateX}px, ${finalTranslateY}px)
-    scale(${viewScaleFactor})
-    `;
+const containerCenterX = containerWidth / 2;
+const containerCenterY = containerHeight / 2;
+
+const finalTranslateX = (containerCenterX - targetX) * viewScaleFactor;
+const finalTranslateY = (containerCenterY - targetY) * viewScaleFactor;
+
+rosaryContainer.style.transform = `
+translate(-50%, -50%)
+translate(${finalTranslateX}px, ${finalTranslateY}px)
+scale(${viewScaleFactor})
+`;
 }
 
 function highlightAndZoom(index) {
